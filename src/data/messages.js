@@ -1,16 +1,10 @@
-// ============================================================
-// messages.js — dummy chat threads for every contact
-//
-// buildContactMessages(contact, index) creates a small,
-// deterministic conversation that ALWAYS ends with the
-// contact's "last message" preview shown in the chat list.
-// ============================================================
+// buildContactMessages(contact, index) makes a short deterministic
+// conversation that ends with the contact's "last message" preview,
+// so the chat list and the thread always agree.
 
 import { LAST_MESSAGES } from './contacts'
 
-// --- pools of dummy text ---------------------------------------------
-
-// Messages we "received" from contacts (excluding the final preview)
+// Things contacts "say" in the generated threads
 const RECEIVED_TEXT = [
   'Morning! How have you been?',
   'I saw your message from earlier, sorry for the delay.',
@@ -26,7 +20,7 @@ const RECEIVED_TEXT = [
   'Tell me more, I am curious.',
 ]
 
-// Replies "we" sent (shown in cobalt bubbles)
+// Replies "we" sent, shown in cobalt bubbles
 const SENT_TEXT = [
   'Sounds great to me!',
   'Okay, let us go with that plan.',
@@ -40,7 +34,7 @@ const SENT_TEXT = [
   'Sounds good, talk later!',
 ]
 
-// Pools used for the pretend auto-reply after we send a message
+// Pool for the auto-reply that arrives after we send a message
 export const AUTO_REPLIES = [
   'Got it, thanks!',
   'Perfect, works for me.',
@@ -54,7 +48,7 @@ export const AUTO_REPLIES = [
 
 // --- generator --------------------------------------------------------
 
-/** Deterministic pseudo-random numbers (same conversation every load) */
+// Deterministic random numbers, so every load shows the same threads
 function seededRandom(seed) {
   let s = seed
   return () => {
@@ -63,16 +57,13 @@ function seededRandom(seed) {
   }
 }
 
-/**
- * Builds an array of { id, contactId, text, time, fromMe, status }
- * for one contact. The last message matches the contact's preview.
- */
+// Builds { id, contactId, text, time, fromMe, status } rows for one contact
 export function buildContactMessages(contact, index) {
   const rnd = seededRandom(index * 7919 + 13)
-  const count = 3 + Math.floor(rnd() * 4) // between 3 and 6 messages
+  const count = 3 + Math.floor(rnd() * 4) // 3 to 6 messages
   const messages = []
 
-  // Start ~30–90 minutes before the final message, then walk forward
+  // Start 30-90 minutes before the final message, then walk forward
   let cursor = new Date(contact.timestamp.getTime() - (30 + Math.floor(rnd() * 60)) * 60000)
 
   for (let i = 0; i < count; i++) {
@@ -85,7 +76,7 @@ export function buildContactMessages(contact, index) {
       cursor = new Date(cursor.getTime() + gapMinutes * 60000)
     }
 
-    const fromMe = isFinal ? false : rnd() < 0.4 // final message is always received
+    const fromMe = isFinal ? false : rnd() < 0.4 // the last message is always received
     const text = isFinal
       ? LAST_MESSAGES[index % LAST_MESSAGES.length]
       : fromMe
@@ -93,12 +84,12 @@ export function buildContactMessages(contact, index) {
         : RECEIVED_TEXT[Math.floor(rnd() * RECEIVED_TEXT.length)]
 
     messages.push({
-      id: `${contact.id}-m${i}`, // unique across all contacts
+      id: `${contact.id}-m${i}`,
       contactId: contact.id,
       text,
       time: cursor,
       fromMe,
-      // Only our own messages carry a delivery status
+      // only our own messages carry a delivery status
       status: fromMe ? ['sent', 'delivered', 'read'][Math.floor(rnd() * 3)] : null,
     })
   }

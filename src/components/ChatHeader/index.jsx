@@ -1,8 +1,5 @@
-// ============================================================
-// ChatHeader/index.jsx — contact avatar, name, presence text
-// (online / last seen) and action buttons. The back button is
-// visible only on small screens.
-// ============================================================
+// Contact avatar, name, online/last-seen text, and action buttons.
+// The back button only shows on small screens.
 
 import { ArrowLeft, MoreVertical, Phone, Video } from 'lucide-react'
 import Avatar from '../Avatar'
@@ -11,7 +8,7 @@ import { formatLastSeen } from '../../utils/format'
 export default function ChatHeader({ contact, onBack }) {
   return (
     <header className="h-14 shrink-0 flex items-center gap-2 px-3 sm:px-4 bg-surface border-b border-line">
-      {/* Back to chat list (mobile only) */}
+      {/* back to chat list, mobile only */}
       <button type="button" onClick={onBack} className="btn-icon lg:hidden" aria-label="Back to chats">
         <ArrowLeft className="w-4 h-4" />
       </button>
@@ -25,7 +22,7 @@ export default function ChatHeader({ contact, onBack }) {
         </p>
       </div>
 
-      {/* Action buttons (decorative for the demo) */}
+      {/* decorative for the demo */}
       <div className="hidden sm:flex items-center gap-2">
         <button type="button" className="btn-icon" aria-label="Call">
           <Phone className="w-4 h-4" />

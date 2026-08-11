@@ -1,8 +1,5 @@
-// ============================================================
-// ChatItem/index.jsx — one row in the chat list:
-// avatar (with online dot), name, last message, timestamp,
-// unread badge, and pin / mute indicators.
-// ============================================================
+// One chat-list row: avatar with online dot, name, last-message
+// preview, timestamp, unread badge, and pin/mute indicators.
 
 import { Pin, VolumeX } from 'lucide-react'
 import Avatar from '../Avatar'
@@ -18,26 +15,23 @@ export default function ChatItem({ contact, active, onSelect }) {
           active ? 'bg-cobalt/10' : 'hover:bg-ink/5'
         }`}
       >
-        {/* Avatar + online dot */}
         <Avatar contact={contact} variant="list" />
 
-        {/* Name, preview, indicators */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <span className="text-sm font-medium truncate">{contact.name}</span>
 
-            {/* Pinned chat */}
+            {/* pinned chat */}
             {contact.pinned && (
               <Pin className="w-3 h-3 text-slate shrink-0" aria-label="Pinned chat" />
             )}
 
-            {/* Muted chat */}
+            {/* muted chat */}
             {contact.muted && (
               <VolumeX className="w-3 h-3 text-slate shrink-0" aria-label="Muted chat" />
             )}
           </div>
 
-          {/* Last message preview */}
           <div className="flex items-center gap-2">
             <p
               className={`text-xs truncate mt-0.5 ${
@@ -49,7 +43,6 @@ export default function ChatItem({ contact, active, onSelect }) {
           </div>
         </div>
 
-        {/* Timestamp + unread badge */}
         <div className="flex flex-col items-end gap-1.5 shrink-0">
           <span className="text-[11px] text-slate">{formatListTime(contact.timestamp)}</span>
           {contact.unread > 0 && (

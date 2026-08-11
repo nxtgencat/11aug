@@ -1,7 +1,5 @@
-// ============================================================
-// ForgotPasswordPage.jsx — mocked reset flow.
-// Enter an email → success screen (no real email is sent).
-// ============================================================
+// Mock reset flow: enter an email, get a success screen.
+// Nothing is actually sent.
 
 import { useState } from 'react'
 import { Check } from 'lucide-react'
@@ -21,13 +19,13 @@ export default function ForgotPasswordPage({ onShowLogin }) {
       return
     }
     setError('')
-    setSent(true) // success! (mock — nothing is actually sent)
+    setSent(true)
   }
 
   return (
     <AuthLayout title="Reset your password" subtitle="We will email you a reset link">
       {sent ? (
-        // Success state — mint check marker, per the design system
+        // success state, mint check marker per the design system
         <div className="text-center py-4">
           <div className="w-12 h-12 rounded-full bg-mint/15 text-mint grid place-content-center mx-auto">
             <Check className="w-5 h-5" />

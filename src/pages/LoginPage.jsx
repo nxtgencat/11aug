@@ -1,6 +1,5 @@
-// ============================================================
-// LoginPage.jsx — mocked login form with client-side validation
-// ============================================================
+// Mock login with client-side validation. Any valid-looking
+// credentials are accepted.
 
 import { useState } from 'react'
 import AuthLayout from '../components/AuthLayout'
@@ -14,7 +13,7 @@ export default function LoginPage({ onShowSignup, onShowForgot }) {
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState({})
 
-  /** Validate the form; if it's clean, mock-login succeeds immediately */
+  // Validate everything, then log in
   function handleSubmit(event) {
     event.preventDefault()
     const nextErrors = {}
@@ -32,7 +31,7 @@ export default function LoginPage({ onShowSignup, onShowForgot }) {
   return (
     <AuthLayout title="Welcome back" subtitle="Log in to continue to your chats">
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        {/* Email */}
+        {/* email */}
         <label className="block">
           <span className="text-sm font-medium mb-1.5 block">Email</span>
           <input
@@ -45,7 +44,7 @@ export default function LoginPage({ onShowSignup, onShowForgot }) {
           {errors.email && <ErrorText message={errors.email} />}
         </label>
 
-        {/* Password */}
+        {/* password */}
         <PasswordField
           id="login-password"
           label="Password"
@@ -70,9 +69,9 @@ export default function LoginPage({ onShowSignup, onShowForgot }) {
         </button>
       </form>
 
-      {/* Demo hint */}
+      {/* demo hint */}
       <p className="mt-5 text-center font-mono text-[11px] tracking-widest text-slate">
-        DEMO — any email · password 6+ chars
+        DEMO - any email · password 6+ chars
       </p>
 
       <p className="mt-5 pt-5 border-t border-line text-center text-sm text-slate">

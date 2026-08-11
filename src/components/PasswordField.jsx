@@ -1,7 +1,5 @@
-// ============================================================
-// PasswordField.jsx — password input with a show/hide eye toggle,
-// reused by the login and signup forms.
-// ============================================================
+// Password input with a show/hide toggle, used by the login
+// and signup forms.
 
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
@@ -35,7 +33,7 @@ export default function PasswordField({ id, label, value, onChange, error, place
   )
 }
 
-/** Inline form error, styled per the design system (rose + alert icon) */
+// Inline form error: rose text with an alert icon
 export function ErrorText({ message }) {
   return (
     <span className="text-xs text-rose mt-1.5 flex items-center gap-1">

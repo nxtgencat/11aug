@@ -1,13 +1,11 @@
-// ============================================================
-// format.js — small date/time helpers used across the app
-// ============================================================
+// Date formatting helpers for the chat list and message bubbles.
 
-/** "9:41 AM" — short clock time */
+/** "9:41 AM" */
 export function formatTime(date) {
   return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
 }
 
-/** "9:41 AM" / "Yesterday" / "Monday" / "Dec 5" — used in the chat list */
+/** "9:41 AM" / "Yesterday" / "Monday" / "Dec 5", used in the chat list */
 export function formatListTime(date) {
   const diffDays = daysBetween(date, new Date())
   if (diffDays === 0) return formatTime(date)
@@ -16,7 +14,7 @@ export function formatListTime(date) {
   return date.toLocaleDateString([], { month: 'short', day: 'numeric' })
 }
 
-/** "Today" / "Yesterday" / "Monday, Dec 5" — day markers inside a chat */
+/** "Today" / "Yesterday" / "Monday, Dec 5", for day markers in a thread */
 export function formatDayLabel(date) {
   const diffDays = daysBetween(date, new Date())
   if (diffDays === 0) return 'Today'
@@ -34,7 +32,7 @@ export function formatLastSeen(contact) {
   return `last seen ${formatDayLabel(contact.lastSeen)}`
 }
 
-/** Whole days between two dates (ignores clock time) */
+/** Whole days between two dates, ignoring clock time */
 function daysBetween(from, to) {
   const a = new Date(from.getFullYear(), from.getMonth(), from.getDate())
   const b = new Date(to.getFullYear(), to.getMonth(), to.getDate())

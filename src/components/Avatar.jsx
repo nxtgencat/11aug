@@ -1,11 +1,6 @@
-// ============================================================
-// Avatar.jsx — circular contact avatar with initials.
-//
+// Initials avatar with a mint online dot.
 // variant: 'list' (44px) | 'header' (40px) | 'bubble' (28px)
-// The online dot matches the design system (mint on a ring).
-// ============================================================
 
-// Tinted backgrounds → design system colors
 const TINTS = {
   cobalt: 'bg-cobalt/15 text-cobalt',
   mint: 'bg-mint/15 text-mint',
@@ -21,7 +16,7 @@ const SIZES = {
   bubble: 'w-7 h-7 text-[10px]',
 }
 
-/** First letters of the first two words: "Ava Chen" → "AC" */
+// First letters of the first two words: "Ava Chen" -> "AC"
 function initials(name) {
   return name
     .split(' ')
@@ -42,7 +37,7 @@ export default function Avatar({ contact, variant = 'list', showStatus = true })
         {initials(contact.name)}
       </span>
 
-      {/* Green online dot, only for contacts that are online right now */}
+      {/* online dot, only when the contact is online right now */}
       {showStatus && contact.online && (
         <span
           className={`absolute bottom-0 right-0 ${dotSize} rounded-full bg-mint ring-2 ring-surface`}

@@ -1,22 +1,16 @@
-// ============================================================
-// useChat.js — data layer for the chat screens
-//
-// Holds all chat state: the contact list, the chat threads,
-// which chat is open, and the search query. Components only
-// read from this hook and call its actions.
-// ============================================================
+// Central chat state: contacts, threads, the open chat, and search.
+// Components only read from this hook and call its actions.
 
 import { useMemo, useState } from 'react'
 import { contacts as seedContacts } from '../data/contacts'
 import { buildContactMessages, AUTO_REPLIES } from '../data/messages'
 
 export function useChat() {
-  // Contacts live in state so the UI can update them:
-  // opening a chat clears its unread count, sending a message
-  // changes its preview text and bumps it to the top of the list.
+  // Contacts are state so the UI can update them (clear unread,
+  // change the preview, reorder the list) without reloading data.
   const [contacts, setContacts] = useState(seedContacts)
 
-  // Chat threads: { contactId: [messages...] }, built on demand
+  // Threads by contact id, built the first time a chat is opened
   const [threads, setThreads] = useState({})
 
   const [selectedContactId, setSelectedContactId] = useState(null)
@@ -24,7 +18,6 @@ export function useChat() {
 
   // --- derived values ------------------------------------------------
 
-  // Contacts we actually have a thread for (fall back to generated data)
   const selectedContact = contacts.find((c) => c.id === selectedContactId) || null
 
   const selectedMessages = useMemo(() => {
@@ -35,7 +28,7 @@ export function useChat() {
     )
   }, [threads, selectedContactId, selectedContact])
 
-  // Sorted list: pinned contacts first, then most recent first
+  // Pinned contacts first, then most recent
   const sortedContacts = useMemo(() => {
     return [...contacts].sort((a, b) => {
       if (a.pinned !== b.pinned) return a.pinned ? -1 : 1
@@ -43,7 +36,7 @@ export function useChat() {
     })
   }, [contacts])
 
-  // Search filter, matched against the contact name
+  // Search matches against the contact name
   const filteredContacts = useMemo(() => {
     const q = search.trim().toLowerCase()
     if (!q) return sortedContacts
@@ -52,7 +45,7 @@ export function useChat() {
 
   // --- actions ---------------------------------------------------------
 
-  /** Open a chat: clear unread + hide the list on mobile */
+  // Open a chat and clear its unread count
   function selectContact(id) {
     setSelectedContactId(id)
     setContacts((prev) =>
@@ -60,15 +53,14 @@ export function useChat() {
     )
   }
 
-  /** Go back to the chat list (mobile back button) */
+  // Mobile back button: return to the chat list
   function clearSelected() {
     setSelectedContactId(null)
   }
 
-  /**
-   * Send a message, then pretend the other person read it and replies.
-   * The timeouts just simulate network delay for the demo.
-   */
+  // Add the message, then simulate delivery ticks (sent, delivered,
+  // read) and an auto-reply with short timeouts, since there is no
+  // real backend to respond.
   function sendMessage(text) {
     if (!selectedContact || !text.trim()) return
 
@@ -78,10 +70,10 @@ export function useChat() {
       text: text.trim(),
       time: new Date(),
       fromMe: true,
-      status: 'sent', // sent → delivered → read
+      status: 'sent',
     }
 
-    // Append to the thread (create one if this chat has none yet)
+    // Append to the thread, creating one if this chat has none yet
     setThreads((prev) => ({
       ...prev,
       [selectedContact.id]: [
@@ -90,14 +82,14 @@ export function useChat() {
       ],
     }))
 
-    // Slide the contact to the top of the list
+    // Bump the contact to the top of the list
     setContacts((prev) =>
       prev.map((c) =>
         c.id === selectedContact.id ? { ...c, lastMessage: sent.text, timestamp: sent.time, unread: 0 } : c,
       ),
     )
 
-    // Fake delivery: 'sent' → 'delivered' → 'read'
+    // Fake delivery: sent, then delivered, then read
     setTimeout(() => {
       setThreads((prev) => markStatus(prev, sent.id, 'delivered'))
     }, 600)
@@ -105,7 +97,7 @@ export function useChat() {
       setThreads((prev) => markStatus(prev, sent.id, 'read'))
     }, 1200)
 
-    // Fake reply from the contact
+    // Auto-reply from the contact
     setTimeout(() => {
       const reply = {
         id: `them-${Date.now()}`,
@@ -128,7 +120,7 @@ export function useChat() {
   }
 
   return {
-    contacts: filteredContacts, // already sorted + filtered by search
+    contacts: filteredContacts,
     selectedContact,
     selectedMessages,
     search,
@@ -139,7 +131,7 @@ export function useChat() {
   }
 }
 
-/** Tiny helper: flip the status field of one message inside a thread map */
+// Sets the status of one message inside a thread map
 function markStatus(prev, messageId, status) {
   return Object.fromEntries(
     Object.entries(prev).map(([contactId, thread]) => [

@@ -1,19 +1,15 @@
 @import "tailwindcss";
 
-/* ============================================================
-   Design tokens — mirror the Tearline design system
-   (design/tearline/index.html): colors, fonts, radius, shadows
-   ============================================================ */
-
+/* Design tokens from the Tearline reference (design/tearline/index.html) */
 @theme {
-  /* Core palette */
+  /* palette */
   --color-paper: #f6f5f1;
   --color-surface: #ffffff;
   --color-ink: #1b1d22;
   --color-slate: #666b75;
   --color-line: #e4e2dc;
 
-  /* Brand accents */
+  /* accents */
   --color-cobalt: #2a4cdb;
   --color-cobalt-dark: #1e39b0;
   --color-cobalt-light: #6c86ff;
@@ -24,12 +20,12 @@
   --color-rose: #d64545;
   --color-rose-light: #f16565;
 
-  /* Type scale */
+  /* type */
   --font-display: "Space Grotesk", sans-serif;
   --font-sans: "Inter", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  /* Shape */
+  /* shape */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -37,14 +33,14 @@
   --radius-xl: 24px;
   --radius-2xl: 32px;
 
-  /* Elevation */
+  /* elevation */
   --shadow-xs: 0 1px 2px rgba(27, 29, 34, 0.05);
   --shadow-sm: 0 2px 10px rgba(27, 29, 34, 0.06);
   --shadow-md: 0 10px 30px rgba(27, 29, 34, 0.08);
   --shadow-lg: 0 20px 50px rgba(27, 29, 34, 0.14);
   --shadow-glow: 0 0 0 4px rgba(42, 76, 219, 0.15);
 
-  /* Motion */
+  /* motion */
   --animate-fadeUp: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @keyframes fadeUp {
@@ -59,10 +55,6 @@
   }
 }
 
-/* ============================================================
-   Base styles
-   ============================================================ */
-
 body {
   -webkit-font-smoothing: antialiased;
   background-color: var(--color-paper);
@@ -74,7 +66,7 @@ body {
   color: #fff;
 }
 
-/* Slim, subtle scrollbars (matches design system) */
+/* thin scrollbars */
 * {
   scrollbar-width: thin;
   scrollbar-color: #d8d6ce transparent;
@@ -94,12 +86,9 @@ body {
   border-radius: 999px;
 }
 
-/* ============================================================
-   Reusable component classes (from design system)
-   ============================================================ */
-
+/* Shared component classes, copied from the design system */
 @layer components {
-  /* Pill buttons */
+  /* buttons */
   .btn-primary {
     @apply px-5 py-2.5 rounded-full bg-cobalt text-white text-sm font-medium shadow-sm transition-all hover:bg-cobalt-dark hover:shadow-md active:scale-[.96];
   }
@@ -120,7 +109,7 @@ body {
     @apply w-9 h-9 rounded-full border border-line grid place-content-center text-slate transition-colors hover:border-ink hover:text-ink;
   }
 
-  /* Form fields */
+  /* form fields */
   .field {
     @apply w-full px-4 py-2.5 rounded-lg bg-surface border border-line text-sm placeholder:text-slate/60 outline-none transition-all focus:border-cobalt focus:shadow-glow;
   }
@@ -129,7 +118,7 @@ body {
     @apply border-rose focus:border-rose focus:shadow-[0_0_0_4px_rgba(214,69,69,.15)] bg-surface text-sm px-4 py-2.5 rounded-lg w-full outline-none transition-all placeholder:text-slate/60;
   }
 
-  /* Cards */
+  /* cards */
   .card {
     @apply p-6 rounded-xl bg-surface shadow-sm;
   }

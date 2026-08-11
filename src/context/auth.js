@@ -1,9 +1,5 @@
-// ============================================================
-// authContext.js — the context object itself.
-// Kept separate so AuthContext.jsx only exports components
-// (which keeps Fast Refresh happy).
-// ============================================================
-
+// The context object lives in its own file so AuthContext.jsx only
+// exports the provider component.
 import { createContext } from 'react'
 
 export const AuthContext = createContext(null)

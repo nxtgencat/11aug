@@ -1,16 +1,12 @@
-// ============================================================
-// MessageList/index.jsx — the scrollable conversation area.
-// Groups messages by day with the design system's "day marker"
-// divider, and always scrolls to the newest message.
-// ============================================================
+// Scrollable thread with day separators; keeps the newest message
+// in view.
 
 import { useEffect, useRef } from 'react'
 import MessageBubble from '../MessageBubble'
 import { formatDayLabel } from '../../utils/format'
 
 export default function MessageList({ contact, messages }) {
-  // Keeps the newest message in view when the chat opens or a
-  // message is sent / received.
+  // Keep the newest message visible when the chat opens or messages change
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -21,7 +17,7 @@ export default function MessageList({ contact, messages }) {
     <div className="flex-1 overflow-y-auto px-4 py-4">
       <div className="max-w-2xl mx-auto flex flex-col gap-3">
         {messages.map((message, i) => {
-          // Insert a day divider when the day changes between rows
+          // insert a day divider when the day changes between rows
           const showDay =
             i === 0 || !sameDay(messages[i - 1].time, message.time)
 
@@ -40,7 +36,7 @@ export default function MessageList({ contact, messages }) {
   )
 }
 
-/** Two dots + mono label, per the design system's separator */
+// Dashed line + mono label, matching the design system's separator
 function DayMarker({ date }) {
   return (
     <div className="flex items-center gap-3 mb-3">

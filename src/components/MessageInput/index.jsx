@@ -1,11 +1,5 @@
-// ============================================================
-// MessageInput/index.jsx — the composer at the bottom of the
-// chat window: attachment button (decorative), text field and
-// a round send button that copies the design system's mini
-// chat widget.
-//
-// Enter ↲ or the send button sends the message.
-// ============================================================
+// Composer at the bottom of the chat window. Press Enter or the
+// send button to send.
 
 import { useState } from 'react'
 import { ArrowUp, Paperclip } from 'lucide-react'
@@ -13,7 +7,7 @@ import { ArrowUp, Paperclip } from 'lucide-react'
 export default function MessageInput({ onSend }) {
   const [text, setText] = useState('')
 
-  /** Clear the field after handing the text up to useChat */
+  // Send and clear the field
   function handleSend() {
     if (!text.trim()) return
     onSend(text)
@@ -23,7 +17,7 @@ export default function MessageInput({ onSend }) {
   return (
     <footer className="shrink-0 bg-surface border-t border-line">
       <div className="flex items-center gap-2 p-3 max-w-2xl mx-auto">
-        {/* Attachment (decorative for this demo) */}
+        {/* decorative in this demo */}
         <button type="button" className="btn-icon" aria-label="Attach file">
           <Paperclip className="w-4 h-4" />
         </button>

@@ -1,14 +1,3 @@
-// ============================================================
-// App.jsx — top-level shell.
-//
-// Logged out → login / signup / forgot-password pages
-// Logged in  → two-column chat layout
-//
-// Responsive: on desktop (lg+) both columns are always visible.
-// On smaller screens only one is shown at a time — opening a
-// chat replaces the list, and the back button goes back.
-// ============================================================
-
 import { useState } from 'react'
 import { AuthProvider } from './context/AuthContext'
 import { useAuth } from './hooks/useAuth'
@@ -30,7 +19,7 @@ function App() {
 function AppContent() {
   const { user } = useAuth()
 
-  // Which auth screen to show: 'login' | 'signup' | 'forgot'
+  // View switcher for the auth screens: 'login' | 'signup' | 'forgot'
   const [authView, setAuthView] = useState('login')
 
   if (!user) {
@@ -38,19 +27,23 @@ function AppContent() {
       return <SignupPage onShowLogin={() => setAuthView('login')} />
     if (authView === 'forgot')
       return <ForgotPasswordPage onShowLogin={() => setAuthView('login')} />
-    return <LoginPage onShowSignup={() => setAuthView('signup')} onShowForgot={() => setAuthView('forgot')} />
+    return (
+      <LoginPage
+        onShowSignup={() => setAuthView('signup')}
+        onShowForgot={() => setAuthView('forgot')}
+      />
+    )
   }
 
   return <ChatApp />
 }
 
-// --- the actual chat application -------------------------------------
-
+// The chat application itself
 function ChatApp() {
   const chat = useChat()
 
-  // Mobile: when a chat is open the list is hidden (and vice versa).
-  // Desktop (lg+): both columns are always rendered side by side.
+  // On phones only one panel fits, so hide whichever side is inactive.
+  // On lg+ screens both columns always show side by side.
   const listVisible = chat.selectedContact ? 'hidden lg:flex' : 'flex'
   const windowVisible = chat.selectedContact ? 'flex' : 'hidden lg:flex'
 

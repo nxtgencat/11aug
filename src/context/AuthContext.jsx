@@ -1,10 +1,5 @@
-// ============================================================
-// AuthContext.jsx — mocked authentication
-//
-// A real app would call an API here. For this demo, login and
-// signup simply accept any valid-looking form and remember the
-// user in localStorage so the session survives a page reload.
-// ============================================================
+// Mocked auth. A real app would call an API here; this one accepts
+// any valid-looking form and keeps the session in localStorage.
 
 import { useEffect, useState } from 'react'
 import { AuthContext } from './auth'
@@ -21,19 +16,19 @@ export function AuthProvider({ children }) {
     }
   })
 
-  // Keep localStorage in sync whenever the user changes
+  // Keep localStorage in sync with state
   useEffect(() => {
     if (user) localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
     else localStorage.removeItem(STORAGE_KEY)
   }, [user])
 
-  /** Called by the login form. name is derived from the email. */
+  // Called by the login form; the name is guessed from the email prefix
   function login(email) {
     const name = email.split('@')[0].replace(/[._-]/g, ' ')
     setUser({ name: name || 'Guest', email })
   }
 
-  /** Called by the signup form. */
+  /** Called by the signup form */
   function signup(name, email) {
     setUser({ name, email })
   }

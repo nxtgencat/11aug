@@ -1,7 +1,4 @@
-// ============================================================
-// SignupPage.jsx — mocked signup form with client-side validation
-// ============================================================
-
+// Mock signup with client-side validation
 import { useState } from 'react'
 import AuthLayout from '../components/AuthLayout'
 import PasswordField, { ErrorText } from '../components/PasswordField'
@@ -16,7 +13,7 @@ export default function SignupPage({ onShowLogin }) {
   const [confirm, setConfirm] = useState('')
   const [errors, setErrors] = useState({})
 
-  /** Validate the form; if it's clean, mock-signup succeeds immediately */
+  // Validate everything, then sign up
   function handleSubmit(event) {
     event.preventDefault()
     const nextErrors = {}
@@ -40,7 +37,7 @@ export default function SignupPage({ onShowLogin }) {
   return (
     <AuthLayout title="Create your account" subtitle="It takes less than a minute">
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        {/* Full name */}
+        {/* full name */}
         <label className="block">
           <span className="text-sm font-medium mb-1.5 block">Full name</span>
           <input
@@ -53,7 +50,7 @@ export default function SignupPage({ onShowLogin }) {
           {errors.name && <ErrorText message={errors.name} />}
         </label>
 
-        {/* Email */}
+        {/* email */}
         <label className="block">
           <span className="text-sm font-medium mb-1.5 block">Email</span>
           <input
@@ -66,7 +63,7 @@ export default function SignupPage({ onShowLogin }) {
           {errors.email && <ErrorText message={errors.email} />}
         </label>
 
-        {/* Passwords */}
+        {/* passwords */}
         <PasswordField
           id="signup-password"
           label="Password"

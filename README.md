@@ -5,10 +5,6 @@ A fully responsive, WhatsApp-style chat interface built with **React (Vite)** an
 Authentication is mocked, all contacts and messages are dummy data — the focus of this
 project is **UI implementation, component structure, and responsive design**.
 
-> Design system: every color, font, radius, shadow, and layout pattern follows the
-> [Tearline design reference](design/tearline/index.html) (paper/surface/ink palette,
-> Space Grotesk + Inter + IBM Plex Mono, pill buttons, rounded bubbles).
-
 ---
 
 ## What was built
@@ -19,7 +15,7 @@ project is **UI implementation, component structure, and responsive design**.
 | **Chat layout** | Two-column desktop layout (contact list + chat window) that switches to a single panel on mobile with a back button to return to the list. |
 | **50 dummy contacts** | Stored in `src/data/contacts.js` and rendered dynamically with `.map()`. Each contact has an id, unique name, tinted avatar (initials), last message, timestamp, online/last-seen status, unread count, pinned flag, and muted flag. |
 | **Chat list** | Avatar with online dot, name, last-message preview, relative timestamp (Today / Yesterday / weekday / date), unread badge, pin and mute indicators, search with empty state, hover and active-chat states, scrollable list, pinned contacts sorted to the top. |
-| **Chat window** | Header with avatar + online/last-seen text, day separators between messages, sent (cobalt) vs received (white) bubbles with the design system's tail corner, timestamps, and delivery ticks for our own messages (sent ✓ / delivered ✓✓ / read ✓✓ in mint). |
+| **Chat window** | Header with avatar + online/last-seen text, day separators between messages, sent (cobalt) vs received (white) bubbles, timestamps, and delivery ticks for our own messages (sent ✓ / delivered ✓✓ / read ✓✓ in mint). |
 | **Messaging (demo)** | Type a message and press Enter or the send button: it appears with `sent → delivered → read` ticks, updates the chat list preview, and the contact replies with a canned auto-reply after 1.5 s. |
 | **Responsive** | Desktop & laptop: both columns. Tablet & mobile: one panel at a time + back button. |
 
@@ -44,11 +40,10 @@ One hook (`useChat`) owns the chat state, so switching the mock data for a real 
 means touching just that file.
 
 ### Design tokens as a Tailwind `@theme`
-The Tearline palette, fonts, radii, shadows, and the `fadeUp` animation are declared in
-`src/index.css` via Tailwind v4's `@theme` block, so utilities like `bg-cobalt`,
-`font-display`, and `shadow-glow` exist everywhere. Repeated patterns (`btn-primary`,
-`btn-ghost`, `.field`, `.card`) are `@apply`-ed component classes copied from the design
-system.
+Colors, fonts, radii, shadows, and the `fadeUp` animation are declared in `src/index.css`
+via Tailwind v4's `@theme` block, so utilities like `bg-cobalt`, `font-display`, and
+`shadow-glow` exist everywhere. Repeated patterns (`btn-primary`, `btn-ghost`, `.field`,
+`.card`) are defined once as `@apply`-ed component classes.
 
 ### Mocked auth flow
 `AuthContext` keeps a `user` object in state, mirrors it to `localStorage` (so a reload

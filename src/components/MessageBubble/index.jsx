@@ -1,11 +1,5 @@
-// ============================================================
-// MessageBubble/index.jsx — a single message.
-//
-// Received: white bubble with a shadow, avatar on the left,
-// timestamp below the bubble.
-// Sent:     cobalt bubble, white text, timestamp + delivery
-// status ticks below (sent ✓ / delivered ✓✓ / read ✓✓ mint).
-// ============================================================
+// One message. Received: white bubble, avatar, timestamp below.
+// Sent: cobalt bubble, with delivery ticks under the timestamp.
 
 import { Check, CheckCheck } from 'lucide-react'
 import Avatar from '../Avatar'
@@ -41,7 +35,7 @@ export default function MessageBubble({ message, contact }) {
   )
 }
 
-/** Delivery ticks: single check = sent, double = delivered, mint = read */
+// Single check = sent, double = delivered, mint double = read
 function StatusTicks({ status }) {
   if (status === 'sent') return <Check className="w-3 h-3" />
   if (status === 'delivered') return <CheckCheck className="w-3 h-3" />

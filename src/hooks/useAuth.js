@@ -1,8 +1,4 @@
-// ============================================================
-// useAuth.js — small hook that gives components access to the
-// current user and the login/signup/logout actions
-// ============================================================
-
+// Gives components access to the current user and the auth actions
 import { useContext } from 'react'
 import { AuthContext } from '../context/auth'
 

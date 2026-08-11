@@ -1,7 +1,5 @@
-// ============================================================
-// Sidebar/index.jsx — the left column: profile header with the
-// logout button, the search bar, and the scrollable chat list.
-// ============================================================
+// Left column: header with the user name and logout button, the
+// search bar, and the scrollable chat list.
 
 import { LogOut, Search } from 'lucide-react'
 import Logo from '../Logo'
@@ -13,11 +11,10 @@ export default function Sidebar({ contacts, search, onSearch, onSelectContact, s
 
   return (
     <aside className="w-full lg:w-[380px] shrink-0 h-full flex flex-col bg-surface border-r border-line">
-      {/* Profile header */}
+      {/* profile header */}
       <header className="h-14 shrink-0 flex items-center justify-between px-4 border-b border-line">
         <Logo />
         <div className="flex items-center gap-2">
-          {/* Logged-in user + logout button */}
           <span
             className="hidden sm:block text-sm text-slate max-w-32 truncate"
             title={user?.email}
@@ -36,7 +33,7 @@ export default function Sidebar({ contacts, search, onSearch, onSelectContact, s
         </div>
       </header>
 
-      {/* Search */}
+      {/* search */}
       <div className="p-3 shrink-0 border-b border-line">
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate" />
@@ -50,7 +47,6 @@ export default function Sidebar({ contacts, search, onSearch, onSelectContact, s
         </div>
       </div>
 
-      {/* Scrollable chat list (empty state handled inside ChatList) */}
       <ChatList
         contacts={contacts}
         selectedContactId={selectedContactId}

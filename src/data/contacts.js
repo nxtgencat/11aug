@@ -1,9 +1,7 @@
-// ============================================================
-// contacts.js — 50 dummy contacts (static mock data)
-//
-// Every contact is built from these lists, one per index, so
-// the data is unique but the file stays short and readable.
-// ============================================================
+// 50 fake contacts. Two lists of first and last names are paired by
+// index, and a few index-based patterns (every 4th contact online,
+// every 10th pinned, ...) keep the list varied without writing out
+// fifty objects by hand.
 
 const FIRST_NAMES = [
   'Ava', 'Liam', 'Mia', 'Noah', 'Zoe', 'Ethan', 'Lily', 'Mason', 'Ivy', 'Owen',
@@ -21,11 +19,11 @@ const LAST_NAMES = [
   'Winter', 'Rinaldi', 'Huang', 'Batista', 'Lindgren', 'Moretti', 'Sokolov', 'Kaur', 'Ferreira', 'Novak',
 ]
 
-// Small palette of avatar tints — matches the design system colors
+// Avatar tints, matching the design system colors
 const AVATAR_COLORS = ['cobalt', 'mint', 'amber', 'rose', 'ink', 'slate']
 
-// Pool of "last message" previews shown under each contact name.
-// The generated chat threads end with exactly this text (see messages.js).
+// Previews shown under each contact name. Each chat thread ends with
+// exactly one of these (see messages.js).
 const LAST_MESSAGES = [
   'Hey! Are we still on for tomorrow?',
   'The report is ready, I just emailed it.',
@@ -49,14 +47,14 @@ const LAST_MESSAGES = [
   'The files are in the shared folder.',
 ]
 
-// --- tiny helpers -----------------------------------------------------
+// --- helpers ----------------------------------------------------------
 
-/** Date `n` minutes ago (timestamps stay fresh relative to page load) */
+/** Date n minutes ago, so timestamps stay fresh relative to page load */
 function minutesAgo(n) {
   return new Date(Date.now() - n * 60000)
 }
 
-/** Date `n` days ago, pushed to a specific hour/minute */
+/** Date n days ago at a given hour and minute */
 function daysAgo(n, hour, minute) {
   const d = new Date(Date.now())
   d.setDate(d.getDate() - n)
@@ -64,7 +62,7 @@ function daysAgo(n, hour, minute) {
   return d
 }
 
-/** Deterministic pseudo-random numbers (same list every load) */
+// Deterministic random numbers, so the same list shows on every load
 function seededRandom(seed) {
   let s = seed
   return () => {
@@ -73,7 +71,7 @@ function seededRandom(seed) {
   }
 }
 
-// --- build the 50 contacts -------------------------------------------
+// --- the 50 contacts ---------------------------------------------------
 
 export const contacts = FIRST_NAMES.map((first, i) => {
   const rnd = seededRandom(i * 7919 + 13)
@@ -83,21 +81,22 @@ export const contacts = FIRST_NAMES.map((first, i) => {
   const minute = Math.floor(rnd() * 60)
 
   return {
-    id: i, // unique id (0–49)
+    id: i, // unique id (0-49)
     name: `${first} ${last}`,
     avatarColor: AVATAR_COLORS[i % AVATAR_COLORS.length],
     lastMessage: LAST_MESSAGES[i % LAST_MESSAGES.length],
     timestamp: daysAgo(day, hour, minute),
-    // Presence
-    online: i % 4 === 0, // every 4th contact is online
+
+    // presence
+    online: i % 4 === 0,
     lastSeen: i % 4 === 0 ? null : minutesAgo(3 + Math.floor(rnd() * 120)),
-    // List metadata
-    unread: i % 5 === 3 ? 1 + Math.floor(rnd() * 6) : 0, // some unread counts
-    pinned: i % 10 === 4, // every 10th contact is pinned
-    muted: i % 7 === 2, // every 7th contact is muted
+
+    // list metadata
+    unread: i % 5 === 3 ? 1 + Math.floor(rnd() * 6) : 0,
+    pinned: i % 10 === 4,
+    muted: i % 7 === 2,
   }
 })
 
-// Re-exported so both the contact list and the message generator
-// derive the same "last message" text.
+// Shared with messages.js so the thread's last message matches the preview
 export { LAST_MESSAGES }
