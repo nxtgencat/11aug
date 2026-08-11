@@ -1,9 +1,9 @@
-# Chatter — WhatsApp-style Chat App (React + Tailwind CSS)
+# Chatter: WhatsApp-style chat app (React + Tailwind CSS)
 
 A fully responsive, WhatsApp-style chat interface built with **React (Vite)** and **Tailwind CSS v4**.
 
-Authentication is mocked, all contacts and messages are dummy data — the focus of this
-project is **UI implementation, component structure, and responsive design**.
+Authentication is mocked and all contacts and messages are dummy data. The focus of this
+project is UI implementation, component structure, and responsive design.
 
 ---
 
@@ -25,15 +25,15 @@ project is **UI implementation, component structure, and responsive design**.
 
 ### Plain JSX (not TypeScript)
 The starter template ships with `.tsx` files, but the project brief specifies `App.jsx` /
-`main.jsx`. Plain JSX keeps the code more approachable for beginners, and the build script
-was changed from `tsc -b && vite build` to a plain `vite build`.
+`main.jsx`. Plain JSX keeps the code approachable for beginners, and the build script runs
+a plain `vite build`.
 
 ### Layer separation: UI vs data
 The app is split so presentational components never talk to data directly:
 
-- **Data layer** — `src/data/` (static mock data), `src/utils/` (date/validation helpers),
-  `src/context/` (auth state), `src/hooks/useChat.js` (all chat state + actions).
-- **UI layer** — `src/components/` (presentational components) and `src/pages/`
+- Data layer: `src/data/` (static mock data), `src/utils/` (date and validation helpers),
+  `src/context/` (auth state), `src/hooks/useChat.js` (all chat state and actions).
+- UI layer: `src/components/` (presentational components) and `src/pages/`
   (auth screens). Components receive data and callback functions as props only.
 
 One hook (`useChat`) owns the chat state, so switching the mock data for a real API later
@@ -48,19 +48,19 @@ via Tailwind v4's `@theme` block, so utilities like `bg-cobalt`, `font-display`,
 ### Mocked auth flow
 `AuthContext` keeps a `user` object in state, mirrors it to `localStorage` (so a reload
 keeps you logged in), and provides `login / signup / logout`. Forms validate themselves;
-any valid-looking credential is accepted — no backend involved.
+any valid-looking credential is accepted. There is no backend.
 
-### Why contacts/messages are generated with a seeded random
-The 50 contacts are built by pairing two lists of 50 unique first/last names with simple
-index patterns (every 4th online, every 10th pinned, ...). A tiny seeded PRNG
-(pseudo-random number generator) makes results **deterministic** — every page load shows
-the same fake conversations, but the data file stays short enough to read in one sitting.
+### Why contacts and messages are generated with a seeded random
+The 50 contacts are built by pairing two lists of 50 unique first and last names with
+simple index patterns (every 4th online, every 10th pinned, ...). A tiny seeded PRNG
+(pseudo-random number generator) makes results deterministic: every page load shows the
+same fake conversations, but the data file stays short enough to read in one sitting.
 
 ### Responsive strategy
-One layout with breakpoint classes instead of separate mobile/desktop trees:
+One layout with breakpoint classes instead of separate mobile and desktop trees:
 
 - `lg:` (≥1024px): sidebar and chat window always visible.
-- below `lg`: only one panel at a time — `App.jsx` toggles `hidden`/`flex` based on
+- below `lg`: only one panel at a time. `App.jsx` toggles `hidden`/`flex` based on
   whether a chat is selected, and the back button calls `clearSelected()`.
 
 ---
@@ -135,6 +135,6 @@ pnpm preview  # serve the production build locally
 pnpm lint     # oxlint checks
 ```
 
-**Trying it out:** any email works — just need a 6+ character password on the login screen
+Trying it out: any email works, you only need a 6+ character password on the login screen
 (`you@example.com` + `123456`). Click a contact, send a message, and watch the mock reply
 arrive. Resize the window (or use DevTools mobile mode) to see the single-panel layout.
