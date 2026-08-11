@@ -2,7 +2,7 @@
 // state when the search matches nothing.
 
 import { SearchX } from 'lucide-react'
-import ChatItem from '../ChatItem'
+import ChatItem from './ChatItem'
 
 export default function ChatList({ contacts, selectedContactId, onSelectContact }) {
   return (

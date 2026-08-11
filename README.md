@@ -78,15 +78,15 @@ One layout with breakpoint classes instead of separate mobile and desktop trees:
     ├── index.css                 # Tailwind import + @theme tokens + .btn-*/field/card classes
     │
     ├── components/
-    │   ├── Sidebar/              # Left column: logo + logout, search bar, scrollable list
-    │   ├── ChatList/             # .map()s contacts, search empty state
-    │   ├── ChatItem/             # One row: avatar, preview, time, unread, pin/mute icons
-    │   ├── ChatWindow/           # Right column: header + messages + input (or empty state)
-    │   ├── ChatHeader/           # Avatar, name, online/last seen, back button (mobile)
-    │   ├── MessageList/          # Scrollable thread, day separators, auto-scroll to bottom
-    │   ├── MessageBubble/        # Sent (cobalt) vs received (white) bubble + ticks
-    │   ├── MessageInput/         # Text field + send button, Enter to send
-    │   ├── Avatar.jsx            # Initials avatar with optional online dot (shared)
+    │   ├── Sidebar.jsx            # Left column: logo + logout, search bar, scrollable list
+    │   ├── ChatList.jsx           # .map()s contacts, search empty state
+    │   ├── ChatItem.jsx           # One row: avatar, preview, time, unread, pin/mute icons
+    │   ├── ChatWindow.jsx         # Right column: header + messages + input (or empty state)
+    │   ├── ChatHeader.jsx         # Avatar, name, online/last seen, back button (mobile)
+    │   ├── MessageList.jsx        # Scrollable thread, day separators, auto-scroll to bottom
+    │   ├── MessageBubble.jsx      # Sent (cobalt) vs received (white) bubble + ticks
+    │   ├── MessageInput.jsx       # Text field + send button, Enter to send
+    │   ├── Avatar.jsx             # Initials avatar with optional online dot (shared)
     │   ├── Logo.jsx              # Brand tile (shared with auth pages)
     │   ├── AuthLayout.jsx        # Centered auth card shell with decorative blobs
     │   └── PasswordField.jsx     # Password input + show/hide eye + ErrorText helper

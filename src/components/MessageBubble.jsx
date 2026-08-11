@@ -2,8 +2,8 @@
 // Sent: cobalt bubble, with delivery ticks under the timestamp.
 
 import { Check, CheckCheck } from 'lucide-react'
-import Avatar from '../Avatar'
-import { formatTime } from '../../utils/format'
+import Avatar from './Avatar'
+import { formatTime } from '../utils/format'
 
 export default function MessageBubble({ message, contact }) {
   if (message.fromMe) {

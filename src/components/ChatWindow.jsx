@@ -4,9 +4,9 @@
 // button returns to the chat list.
 
 import { MessageCircle } from 'lucide-react'
-import ChatHeader from '../ChatHeader'
-import MessageList from '../MessageList'
-import MessageInput from '../MessageInput'
+import ChatHeader from './ChatHeader'
+import MessageList from './MessageList'
+import MessageInput from './MessageInput'
 
 export default function ChatWindow({ contact, messages, onBack, onSend }) {
   return (

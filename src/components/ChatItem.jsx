@@ -2,8 +2,8 @@
 // preview, timestamp, unread badge, and pin/mute indicators.
 
 import { Pin, VolumeX } from 'lucide-react'
-import Avatar from '../Avatar'
-import { formatListTime } from '../../utils/format'
+import Avatar from './Avatar'
+import { formatListTime } from '../utils/format'
 
 export default function ChatItem({ contact, active, onSelect }) {
   return (

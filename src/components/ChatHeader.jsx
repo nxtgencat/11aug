@@ -2,8 +2,8 @@
 // The back button only shows on small screens.
 
 import { ArrowLeft, MoreVertical, Phone, Video } from 'lucide-react'
-import Avatar from '../Avatar'
-import { formatLastSeen } from '../../utils/format'
+import Avatar from './Avatar'
+import { formatLastSeen } from '../utils/format'
 
 export default function ChatHeader({ contact, onBack }) {
   return (

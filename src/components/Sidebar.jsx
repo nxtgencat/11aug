@@ -2,9 +2,9 @@
 // search bar, and the scrollable chat list.
 
 import { LogOut, Search } from 'lucide-react'
-import Logo from '../Logo'
-import ChatList from '../ChatList'
-import { useAuth } from '../../hooks/useAuth'
+import Logo from './Logo'
+import ChatList from './ChatList'
+import { useAuth } from '../hooks/useAuth'
 
 export default function Sidebar({ contacts, search, onSearch, onSelectContact, selectedContactId }) {
   const { user, logout } = useAuth()

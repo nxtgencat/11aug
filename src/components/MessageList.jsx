@@ -2,8 +2,8 @@
 // in view.
 
 import { useEffect, useRef } from 'react'
-import MessageBubble from '../MessageBubble'
-import { formatDayLabel } from '../../utils/format'
+import MessageBubble from './MessageBubble'
+import { formatDayLabel } from '../utils/format'
 
 export default function MessageList({ contact, messages }) {
   // Keep the newest message visible when the chat opens or messages change
