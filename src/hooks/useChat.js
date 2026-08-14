@@ -58,16 +58,43 @@ export function useChat() {
     setSelectedContactId(null)
   }
 
+  // Programmatic mute and pin toggles, used from the chat header menu
+  function toggleMute(id) {
+    setContacts((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, muted: !c.muted } : c)),
+    )
+  }
+
+  function togglePin(id) {
+    setContacts((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, pinned: !c.pinned } : c)),
+    )
+  }
+
   // Add the message, then simulate delivery ticks (sent, delivered,
   // read) and an auto-reply with short timeouts, since there is no
-  // real backend to respond.
-  function sendMessage(text) {
-    if (!selectedContact || !text.trim()) return
+  // real backend to respond. The payload can carry text, attached
+  // media, or a recorded voice message.
+  function sendMessage(payload) {
+    if (!selectedContact) return
+
+    const text = payload.text?.trim() ?? ''
+    const media = payload.media ?? []
+    const voice = payload.voice ?? null
+    if (!text && media.length === 0 && !voice) return
+
+    const preview = voice
+      ? 'Voice message'
+      : media.length
+        ? mediaPreview(media)
+        : text
 
     const sent = {
       id: `me-${Date.now()}`,
       contactId: selectedContact.id,
-      text: text.trim(),
+      text,
+      media,
+      voice,
       time: new Date(),
       fromMe: true,
       status: 'sent',
@@ -85,7 +112,7 @@ export function useChat() {
     // Bump the contact to the top of the list
     setContacts((prev) =>
       prev.map((c) =>
-        c.id === selectedContact.id ? { ...c, lastMessage: sent.text, timestamp: sent.time, unread: 0 } : c,
+        c.id === selectedContact.id ? { ...c, lastMessage: preview, timestamp: sent.time, unread: 0 } : c,
       ),
     )
 
@@ -127,6 +154,8 @@ export function useChat() {
     setSearch,
     selectContact,
     clearSelected,
+    toggleMute,
+    togglePin,
     sendMessage,
   }
 }
@@ -139,4 +168,14 @@ function markStatus(prev, messageId, status) {
       thread.map((m) => (m.id === messageId ? { ...m, status } : m)),
     ]),
   )
+}
+
+// Short label for attachments, shown in the chat list
+function mediaPreview(media) {
+  if (media.length > 1) return `${media.length} attachments`
+  const kind = media[0].kind
+  if (kind === 'image') return '📷 Photo'
+  if (kind === 'video') return '🎬 Video'
+  if (kind === 'document') return '📎 Document'
+  return '👤 Contact'
 }

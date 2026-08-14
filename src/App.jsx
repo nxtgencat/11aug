@@ -1,12 +1,9 @@
-import { useState } from 'react'
 import { AuthProvider } from './context/AuthContext'
 import { useAuth } from './hooks/useAuth'
 import { useChat } from './hooks/useChat'
 import Sidebar from './components/Sidebar'
 import ChatWindow from './components/ChatWindow'
 import LoginPage from './pages/LoginPage'
-import SignupPage from './pages/SignupPage'
-import ForgotPasswordPage from './pages/ForgotPasswordPage'
 
 function App() {
   return (
@@ -19,21 +16,7 @@ function App() {
 function AppContent() {
   const { user } = useAuth()
 
-  // View switcher for the auth screens: 'login' | 'signup' | 'forgot'
-  const [authView, setAuthView] = useState('login')
-
-  if (!user) {
-    if (authView === 'signup')
-      return <SignupPage onShowLogin={() => setAuthView('login')} />
-    if (authView === 'forgot')
-      return <ForgotPasswordPage onShowLogin={() => setAuthView('login')} />
-    return (
-      <LoginPage
-        onShowSignup={() => setAuthView('signup')}
-        onShowForgot={() => setAuthView('forgot')}
-      />
-    )
-  }
+  if (!user) return <LoginPage />
 
   return <ChatApp />
 }
@@ -64,6 +47,8 @@ function ChatApp() {
           messages={chat.selectedMessages}
           onBack={chat.clearSelected}
           onSend={chat.sendMessage}
+          onToggleMute={chat.toggleMute}
+          onTogglePin={chat.togglePin}
         />
       </div>
     </div>

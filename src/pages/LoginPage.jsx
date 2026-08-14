@@ -1,89 +1,132 @@
-// Mock login with client-side validation. Any valid-looking
-// credentials are accepted.
+// Mock phone sign-in with an OTP. The code is shown on screen
+// because there is no real SMS service.
 
 import { useState } from 'react'
-import AuthLayout from '../components/AuthLayout'
-import PasswordField, { ErrorText } from '../components/PasswordField'
-import { isValidEmail } from '../utils/validation'
+import AuthLayout, { ErrorText } from '../components/AuthLayout'
 import { useAuth } from '../hooks/useAuth'
 
-export default function LoginPage({ onShowSignup, onShowForgot }) {
-  const { login } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+const COUNTRY_CODES = ['+86', '+1', '+44', '+61', '+91', '+81', '+49', '+33', '+7']
+
+export default function LoginPage() {
+  const { loginWithPhone } = useAuth()
+
+  // 'number' | 'otp'
+  const [step, setStep] = useState('number')
+
+  const [country, setCountry] = useState('+86')
+  const [phone, setPhone] = useState('')
+  const [code, setCode] = useState('')
+
   const [errors, setErrors] = useState({})
 
-  // Validate everything, then log in
-  function handleSubmit(event) {
+  // Send a mock OTP: move to the verify step. Since this is a demo,
+  // any 6-digit code is accepted.
+  function sendCode(event) {
     event.preventDefault()
-    const nextErrors = {}
+    const digits = phone.replace(/\D/g, '')
+    if (digits.length < 6) {
+      setErrors({ phone: 'Enter a valid phone number' })
+      return
+    }
+    setErrors({})
+    setCode('')
+    setStep('otp')
+  }
 
-    if (!email.trim()) nextErrors.email = 'Email is required'
-    else if (!isValidEmail(email)) nextErrors.email = 'Enter a valid email address'
-
-    if (!password) nextErrors.password = 'Password is required'
-    else if (password.length < 6) nextErrors.password = 'Password must be at least 6 characters'
-
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length === 0) login(email.trim())
+  function verifyCode(event) {
+    event.preventDefault()
+    if (code.length === 6) {
+      loginWithPhone(`${country}${phone.replace(/\D/g, '')}`)
+    } else {
+      setErrors({ code: 'Enter the 6-digit code' })
+    }
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Log in to continue to your chats">
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        {/* email */}
-        <label className="block">
-          <span className="text-sm font-medium mb-1.5 block">Email</span>
-          <input
-            type="email"
-            value={email}
-            placeholder="you@example.com"
-            onChange={(e) => setEmail(e.target.value)}
-            className={errors.email ? 'field-error' : 'field'}
-          />
-          {errors.email && <ErrorText message={errors.email} />}
-        </label>
+    <AuthLayout title="Welcome back" subtitle="Log in with your phone number">
+      {step === 'number' ? (
+        <form onSubmit={sendCode} className="space-y-4" noValidate>
+          <label className="block">
+            <span className="text-sm font-medium mb-1.5 block">Phone number</span>
+            <div className="flex gap-2">
+              <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="field w-24 shrink-0 cursor-pointer"
+                aria-label="Country code"
+              >
+                {COUNTRY_CODES.map((cc) => (
+                  <option key={cc} value={cc}>
+                    {cc}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                inputMode="numeric"
+                value={phone}
+                placeholder="Phone number"
+                onChange={(e) => setPhone(e.target.value)}
+                className={errors.phone ? 'field-error' : 'field'}
+              />
+            </div>
+            {errors.phone && <ErrorText message={errors.phone} />}
+          </label>
 
-        {/* password */}
-        <PasswordField
-          id="login-password"
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={errors.password}
-          placeholder="At least 6 characters"
-        />
-
-        <div className="text-right pt-1">
-          <button
-            type="button"
-            onClick={onShowForgot}
-            className="text-sm text-cobalt hover:underline cursor-pointer"
-          >
-            Forgot password?
+          <button type="submit" className="btn-primary w-full cursor-pointer">
+            Send code
           </button>
-        </div>
+        </form>
+      ) : (
+        <form onSubmit={verifyCode} className="space-y-4" noValidate>
+          <label className="block">
+            <span className="text-sm font-medium mb-1.5 block">
+              Code sent to {country}
+              {phone.replace(/\D/g, '')}
+            </span>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+              placeholder="······"
+              className={
+                errors.code
+                  ? 'field-error text-center font-mono text-lg tracking-[0.4em]'
+                  : 'field text-center font-mono text-lg tracking-[0.4em]'
+              }
+            />
+            {errors.code && <ErrorText message={errors.code} />}
+          </label>
 
-        <button type="submit" className="btn-primary w-full cursor-pointer">
-          Log in
-        </button>
-      </form>
+          <div className="flex items-center justify-between text-sm pt-1">
+            <button
+              type="button"
+              onClick={() => setStep('number')}
+              className="text-slate hover:text-ink transition-colors cursor-pointer"
+            >
+              Edit number
+            </button>
+            <button
+              type="button"
+              onClick={sendCode}
+              className="text-cobalt hover:underline cursor-pointer"
+            >
+              Resend code
+            </button>
+          </div>
 
-      {/* demo hint */}
-      <p className="mt-5 text-center font-mono text-[11px] tracking-widest text-slate">
-        DEMO - any email · password 6+ chars
-      </p>
+          <button type="submit" className="btn-primary w-full cursor-pointer">
+            Verify and log in
+          </button>
 
-      <p className="mt-5 pt-5 border-t border-line text-center text-sm text-slate">
-        New here?{' '}
-        <button
-          type="button"
-          onClick={onShowSignup}
-          className="text-cobalt font-medium hover:underline cursor-pointer"
-        >
-          Create an account
-        </button>
-      </p>
+          {/* demo hint: any 6-digit code works */}
+          <p className="rounded-lg bg-mint/10 border border-mint/20 px-3 py-2 text-xs text-ink text-center font-mono">
+            DEMO - any 6-digit code works
+          </p>
+        </form>
+      )}
     </AuthLayout>
   )
 }

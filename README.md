@@ -11,12 +11,16 @@ project is UI implementation, component structure, and responsive design.
 
 | Area | Features |
 | ---- | -------- |
-| **Authentication** | Login, Signup, and Forgot-password pages. Client-side form validation (email format, password length, confirm-password match), show/hide password toggle, mocked session persisted in `localStorage`, logout button in the sidebar. |
+| **Authentication** | Phone-number sign-in with a mock OTP (any 6-digit code works). Mocked session persisted in `localStorage`, logout button in the sidebar. |
 | **Chat layout** | Two-column desktop layout (contact list + chat window) that switches to a single panel on mobile with a back button to return to the list. |
 | **50 dummy contacts** | Stored in `src/data/contacts.js` and rendered dynamically with `.map()`. Each contact has an id, unique name, tinted avatar (initials), last message, timestamp, online/last-seen status, unread count, pinned flag, and muted flag. |
 | **Chat list** | Avatar with online dot, name, last-message preview, relative timestamp (Today / Yesterday / weekday / date), unread badge, pin and mute indicators, search with empty state, hover and active-chat states, scrollable list, pinned contacts sorted to the top. |
 | **Chat window** | Header with avatar + online/last-seen text, day separators between messages, sent (cobalt) vs received (white) bubbles, timestamps, and delivery ticks for our own messages (sent ✓ / delivered ✓✓ / read ✓✓ in mint). |
 | **Messaging (demo)** | Type a message and press Enter or the send button: it appears with `sent → delivered → read` ticks, updates the chat list preview, and the contact replies with a canned auto-reply after 1.5 s. |
+| **Media & voice** | An attach menu offers images, video, documents, and contact cards, each with previews and remove buttons before sending. The mic records a real voice note (falls back to a fake one if the microphone is denied), with an animated waveform, duration, and play/pause playback in the bubble. |
+| **Emoji picker** | A palette of 60+ emojis above the composer; picking appends to the draft. Messages that are just emoji render large, like WhatsApp. |
+| **Chat options** | A menu in the chat header toggles mute and pin per chat. Pinning re-sorts the list to the top, and mute/pin states show in the chat list. |
+| **Phone sign-in** | The only way in: country code + number, then a mock OTP step. Any 6-digit code is accepted since there is no SMS. |
 | **Responsive** | Desktop & laptop: both columns. Tablet & mobile: one panel at a time + back button. |
 
 ---
@@ -47,8 +51,8 @@ via Tailwind v4's `@theme` block, so utilities like `bg-cobalt`, `font-display`,
 
 ### Mocked auth flow
 `AuthContext` keeps a `user` object in state, mirrors it to `localStorage` (so a reload
-keeps you logged in), and provides `login / signup / logout`. Forms validate themselves;
-any valid-looking credential is accepted. There is no backend.
+keeps you logged in), and provides `loginWithPhone / logout`. There is no backend, and
+any 6-digit OTP is accepted in place of a real SMS.
 
 ### Why contacts and messages are generated with a seeded random
 The 50 contacts are built by pairing two lists of 50 unique first and last names with
@@ -74,7 +78,7 @@ One layout with breakpoint classes instead of separate mobile and desktop trees:
 ├── package.json                  # deps + scripts (dev / build / preview / lint)
 └── src/
     ├── main.jsx                  # React entry point (renders <App/>)
-    ├── App.jsx                   # Top-level shell: auth pages ↔ chat app, responsive toggle
+    ├── App.jsx                   # Top-level shell: phone sign-in ↔ chat app, responsive toggle
     ├── index.css                 # Tailwind import + @theme tokens + .btn-*/field/card classes
     │
     ├── components/
@@ -85,20 +89,19 @@ One layout with breakpoint classes instead of separate mobile and desktop trees:
     │   ├── ChatHeader.jsx         # Avatar, name, online/last seen, back button (mobile)
     │   ├── MessageList.jsx        # Scrollable thread, day separators, auto-scroll to bottom
     │   ├── MessageBubble.jsx      # Sent (cobalt) vs received (white) bubble + ticks
-    │   ├── MessageInput.jsx       # Text field + send button, Enter to send
+    │   ├── MessageInput.jsx       # Composer: attach menu, emoji picker, mic recording
+    │   ├── VoiceNote.jsx          # Voice message: waveform, duration, play/pause
     │   ├── Avatar.jsx             # Initials avatar with optional online dot (shared)
-    │   ├── Logo.jsx              # Brand tile (shared with auth pages)
-    │   ├── AuthLayout.jsx        # Centered auth card shell with decorative blobs
-    │   └── PasswordField.jsx     # Password input + show/hide eye + ErrorText helper
+    │   ├── Logo.jsx              # Brand tile (shared with the sign-in page)
+    │   └── AuthLayout.jsx        # Centered auth card shell + ErrorText helper
     │
     ├── pages/
-    │   ├── LoginPage.jsx         # Mock login with validation
-    │   ├── SignupPage.jsx        # Mock signup with validation
-    │   └── ForgotPasswordPage.jsx# Mock reset → success state
+    │   └── LoginPage.jsx         # Phone number + mock OTP sign-in
     │
     ├── data/
-    │   ├── contacts.js           # 50 unique dummy contacts (names, status, badges...)
-    │   └── messages.js           # Dummy conversation generator + auto-reply pool
+    │   ├── contacts.js            # 50 unique dummy contacts (names, status, badges...)
+    │   ├── messages.js            # Dummy conversation generator + auto-reply pool
+    │   └── emojis.js              # Emoji palette for the picker
     │
     ├── hooks/
     │   ├── useChat.js            # Central chat state: threads, selection, search, send
@@ -135,6 +138,6 @@ pnpm preview  # serve the production build locally
 pnpm lint     # oxlint checks
 ```
 
-Trying it out: any email works, you only need a 6+ character password on the login screen
-(`you@example.com` + `123456`). Click a contact, send a message, and watch the mock reply
-arrive. Resize the window (or use DevTools mobile mode) to see the single-panel layout.
+Trying it out: log in with any phone number (6+ digits) and any 6-digit OTP. Click a
+contact, send a message, and watch the mock reply arrive. Resize the window (or use
+DevTools mobile mode) to see the single-panel layout.

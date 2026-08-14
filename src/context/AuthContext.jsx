@@ -7,7 +7,7 @@ import { AuthContext } from './auth'
 const STORAGE_KEY = 'chatter.user'
 
 export function AuthProvider({ children }) {
-  // user = { name, email } or null when logged out
+  // user = { name, phone } or null when logged out
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null
@@ -22,15 +22,9 @@ export function AuthProvider({ children }) {
     else localStorage.removeItem(STORAGE_KEY)
   }, [user])
 
-  // Called by the login form; the name is guessed from the email prefix
-  function login(email) {
-    const name = email.split('@')[0].replace(/[._-]/g, ' ')
-    setUser({ name: name || 'Guest', email })
-  }
-
-  /** Called by the signup form */
-  function signup(name, email) {
-    setUser({ name, email })
+  // Called after a phone number + OTP verification
+  function loginWithPhone(phone) {
+    setUser({ name: 'Guest', phone })
   }
 
   function logout() {
@@ -38,7 +32,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loginWithPhone, logout }}>
       {children}
     </AuthContext.Provider>
   )

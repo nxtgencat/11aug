@@ -8,12 +8,26 @@ import ChatHeader from './ChatHeader'
 import MessageList from './MessageList'
 import MessageInput from './MessageInput'
 
-export default function ChatWindow({ contact, messages, onBack, onSend }) {
+export default function ChatWindow({
+  contact,
+  messages,
+  onBack,
+  onSend,
+  onToggleMute,
+  onTogglePin,
+}) {
   return (
     <section className="flex-1 min-w-0 h-full flex flex-col bg-paper">
       {contact ? (
         <>
-          <ChatHeader contact={contact} onBack={onBack} />
+          <ChatHeader
+            contact={contact}
+            onBack={onBack}
+            muted={contact.muted}
+            pinned={contact.pinned}
+            onToggleMute={() => onToggleMute(contact.id)}
+            onTogglePin={() => onTogglePin(contact.id)}
+          />
           <MessageList contact={contact} messages={messages} />
           <MessageInput onSend={onSend} />
         </>
